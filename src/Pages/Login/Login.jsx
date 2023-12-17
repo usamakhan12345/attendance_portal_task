@@ -70,7 +70,7 @@ export default function BasicTextFields() {
           sx={{ marginBottom: 5 }}
           id="outlined-basic"
           label="Email"
-          variant="outlined"
+          variant="outlined"git init
           onChange={(e)=> setEmail(e.target.value)}
           value={email}
         />
