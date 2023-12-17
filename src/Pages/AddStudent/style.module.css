@@ -1,0 +1,38 @@
+.imageBox{
+    height: 100%;
+    width: 100px;
+    background-color: #5C92F7;
+    border-radius: 50%;
+    position: relative;
+}
+.addBtn{
+    margin-right: 20px;
+    background-color: #5C92F7;
+    color: white;
+    font-weight: 600;
+    border-color: #5C92F7;
+    margin-top: 20px;
+    padding: 10px 20px;
+    border-radius: 10px;
+
+}
+.addStdHead{
+    font-weight: 700;
+    margin-top: 30px;
+    margin-left: 20px;
+}
+
+.cameraIcon{
+    position: absolute;
+    bottom: 0px;
+    right: 10;    
+    font-size: 18px;
+    cursor: pointer;
+    
+}
+.imageInput{
+    visibility: hidden;
+}
+.userImage{
+    border-radius: 50%;
+}

@@ -1,0 +1,11 @@
+.tableHead{
+    background-color: #5C93FA;
+    width: 100%;
+    color: white;
+    height: 45px;
+    border-radius: 15px;
+    padding : 10px
+}
+.passInp:focus{
+    border: none;
+}
