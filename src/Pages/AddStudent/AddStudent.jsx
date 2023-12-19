@@ -8,6 +8,8 @@ import { useRef } from "react";
 import UserImage from "../../assets/userimage.jpg";
 import axios from 'axios'
 import {toast} from 'react-toastify'
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 export default function TextFieldSizes() {
   const [firstName, setFirstName] = useState();
@@ -22,6 +24,8 @@ export default function TextFieldSizes() {
 
   const imageInputref = useRef(0);
   const userImage = useRef(0);
+  const theme = useTheme();
+  const isMediumScreen = useMediaQuery(theme.breakpoints.up("md"));
 
   const AddStudent = () => {
     const studentsDetails = {
@@ -141,7 +145,7 @@ export default function TextFieldSizes() {
         component="form"
         sx={{
           width: "100%", 
-          "& .MuiTextField-root": { m: 1, width: "25ch" },
+          "& .MuiTextField-root": { m: 1, width: "30ch" },
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
@@ -150,21 +154,24 @@ export default function TextFieldSizes() {
         noValidate
         autoComplete="off"
       >
-        <div>
+        <div className={styles.inputContainer} >
           <TextField
             label="First Name"
             id="outlined-size-normal"
             onChange={(e) => setFirstName(e.target.value)}
             value={firstName}
+            // className={styles.textfield}
           />
           <TextField
             label="Last Name"
             id="outlined-size-normal"
             onChange={(e) => setlastName(e.target.value)}
             value={lastName}
+            md={12}
+
           />
-        </div>
-        <div>
+        </div >
+        <div className={styles.inputContainer} >
           <TextField
             label="Course"
             id="outlined-size-normal"
@@ -179,7 +186,7 @@ export default function TextFieldSizes() {
             value={password}
           />
         </div>
-        <div>
+        <div className={styles.inputContainer} >
           <TextField
             label="Email"
             id="outlined-size-normal"

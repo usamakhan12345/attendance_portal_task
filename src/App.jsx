@@ -8,11 +8,28 @@ import AddStudent from './Pages/AddStudent/AddStudent'
 import Dashboard from './Pages/Dashboard/Dashboard'
 import AdminAttendance from './Pages/AdminPortal/AdminportalAttendance/AdminAttendance'
 import User from "./Pages/User/User"
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const App = () => {
   return (
    <>
     <Router>
+    <ToastContainer
+  position="top-right"
+  autoClose={5000}
+  hideProgressBar={false}
+  newestOnTop={false}
+  closeOnClick
+  rtl={false}
+  pauseOnFocusLoss
+  draggable
+  pauseOnHover
+  theme="light"
+  />
+  {/* Same as */}
+  <ToastContainer />
       <Routes>
         <Route  path='/'  element={<Login/>} />
         <Route  path='/admin'  element={<Adminportal/>} />

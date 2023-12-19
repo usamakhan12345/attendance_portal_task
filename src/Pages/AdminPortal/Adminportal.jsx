@@ -31,31 +31,27 @@ const Adminportal = () => {
 
     },[])
     console.log(studentsData)
-    const dynamicData = [
-        { id: 1, profileImage: 'path/to/image1.jpg', name: 'John Doe', courseName: 'React', password: '*********' },
-        { id: 2, profileImage: 'path/to/image2.jpg', name: 'Jane Doe', courseName: 'Node.js', password: '*********' },
-        // Add more data as needed
-      ];
+
   return (
     <>
       {/* <Portal/> */}
       {/* <Modal open={true} handleOpen={handleOpen} handleClose={handleClose} /> */}
       <div className={styles.portalContainer}>
         <div className={styles.sideBar}>
-          <h3 className={styles.sidebarHeading}>Saylani</h3>
+          <h2 className={styles.sidebarHeading}>SMIT</h2>
           <ul
             style={{
               display: "flex",
               flexDirection: "column ",
             }}
           >
-            <div>
+            <div >
               <li className={styles.listItem}>
                 {" "}
                 <CiUser
                   style={{ color: "#3D7CF3", fontWeight: "bold", fontSize: 30 }}
                 />{" "}
-                Students
+                <span style={{fontWeight :'bold' , color:'#5C93FA' ,fontSize : 20}} >Students</span>
               </li>
             </div>
             <div>
@@ -64,7 +60,8 @@ const Adminportal = () => {
                 <LuUserSquare
                   style={{ color: "#3D7CF3", fontWeight: "bold", fontSize: 30 }}
                 />{" "}
-                Attendance
+                <span style={{fontWeight :'bold' , color:'#5C93FA' ,fontSize : 20}} >Attendance</span>
+
               </li>
             </div>
           </ul>

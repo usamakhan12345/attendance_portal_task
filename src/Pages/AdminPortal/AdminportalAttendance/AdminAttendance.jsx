@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { FaUser } from "react-icons/fa";
 import { FaPlusCircle } from "react-icons/fa";
 import Table from '../../../Components/Table/table'
-
+import DataTable from "../../../Components/MTable/Table"
 
 const Adminportal = () => {
     const redirect = useNavigate()
@@ -21,7 +21,7 @@ const Adminportal = () => {
       {/* <Portal/> */}
       <div className={styles.portalContainer}>
         <div className={styles.sideBar}>
-          <h3 className={styles.sidebarHeading}>Saylani</h3>
+          <h2 className={styles.sidebarHeading}>SMIT</h2>
           <ul
             style={{
               display: "flex",
@@ -34,7 +34,7 @@ const Adminportal = () => {
                 <CiUser
                   style={{ color: "#3D7CF3", fontWeight: "bold", fontSize: 30 }}
                 />{" "}
-                Students
+                            <span style={{fontWeight :'bold' , color:'#5C93FA' ,fontSize : 20}} >Students</span>
               </li>
             </div>
             <div>
@@ -43,7 +43,9 @@ const Adminportal = () => {
                 <LuUserSquare
                   style={{ color: "#3D7CF3", fontWeight: "bold", fontSize: 30 }}
                 />{" "}
-                Attendance
+                            <span style={{fontWeight :'bold' , color:'#5C93FA' ,fontSize : 20}} >Attendance</span>
+
+                
               </li>
             </div>
           </ul>
@@ -61,13 +63,18 @@ const Adminportal = () => {
                 <h3 style={{marginLeft : 10}}>Attendance</h3>
                 </div>
                 </div>
+                <div>
+                  <h3 className={styles.adminPortalHead}>Admin Portal</h3>
+                </div>
                 <div style={{display: 'flex' , alignItems : 'center' , justifyContent : 'center'}}>
                     <button onClick={()=> redirect('/addStudent')} className={styles.addStudentBtn}> <FaPlusCircle/> Add Student</button>
                 </div>
+               
             </div>
             
             <div style={{marginTop : 20}}>
-                <Table id ='ID' profileImage = 'Profile Img' Name= 'Name'  checkinTime = "Checked In Time"  checkoutTime = "Checked out Time"  data ={dynamicData} />
+                {/* <Table id ='ID' profileImage = 'Profile Img' Name= 'Name'  checkinTime = "Checked In Time"  checkoutTime = "Checked out Time"  data ={dynamicData} /> */}
+                <DataTable/>
 
             </div>
  

@@ -2,5 +2,6 @@
     display: flex;
 }
 .loginBtn{
-    border-radius: 14px;
+    border-radius: 20px !important;
+    width: 350px !important;
 }
