@@ -9,3 +9,17 @@
 .passInp:focus{
     border: none;
 }
+.td{
+    text-align: center;
+}
+.eyeIcon  , .editIcon{
+    font-size: 22px;
+    cursor: pointer;
+}
+.eyeIcon:active{
+    opacity: 0.6;
+}
+
+.eyeIcon{
+    text-align: center;
+}

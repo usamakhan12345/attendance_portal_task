@@ -6,10 +6,16 @@ import { FaCamera } from "react-icons/fa";
 import { useState } from "react";
 import { useRef } from "react";
 import UserImage from "../../assets/userimage.jpg";
-import axios from 'axios'
-import {toast} from 'react-toastify'
+import axios from "axios";
+import { toast } from "react-toastify";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { FaArrowLeft } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+
+
+
+
 
 export default function TextFieldSizes() {
   const [firstName, setFirstName] = useState();
@@ -20,11 +26,13 @@ export default function TextFieldSizes() {
   const [phoneNumber, setPhoneNum] = useState();
   const [Image, setImage] = useState();
   const [userImageFile, setUserImageFile] = useState();
-  const[imageCloudUrl, setImageCloudUrl] = useState()
+  const [imageCloudUrl, setImageCloudUrl] = useState();
 
   const imageInputref = useRef(0);
   const userImage = useRef(0);
   const theme = useTheme();
+  const redirect = useNavigate()
+
   const isMediumScreen = useMediaQuery(theme.breakpoints.up("md"));
 
   const AddStudent = () => {
@@ -35,47 +43,52 @@ export default function TextFieldSizes() {
       password,
       email,
       phoneNumber,
-      Image : imageCloudUrl,
+      Image: imageCloudUrl,
     };
     console.log(studentsDetails);
     const formData = new FormData();
-    formData.append('file', userImageFile);
+    formData.append("file", userImageFile);
 
     axios({
-      method: 'post',
-    url: 'http://localhost:3000/api/upload',
-    data: formData
-    
-  }).then((res)=>{
-    console.log(res)
-    console.log(res.data.url)
-    setImageCloudUrl(res.data.url)
- 
-    toast.success("image upload succes")
-
-    axios({
-      method: 'post',
-    url: 'http://localhost:3000/api/students/signup',
-    data: {
-      ...studentsDetails
-    }
-  }).then((res)=>{
-    
-    console.log(res)
-    setFirstName("")
-    setlastName("")
-    setCourse("")
-    setEmail("")
-    setPassword("")
-    setPhoneNum("")
-    setImage("")
-  }).catch(err => console.log(err))
-
-  }).catch(err => console.log(err))
+      method: "post",
+      url: "http://localhost:3000/api/upload",
+      data: formData,
+    })
+      .then((res) => {
+        console.log(res);
+        console.log(res.data.url);
+        setImageCloudUrl(res.data.url);
+        createStudent()
+      
+       
+      })
+      .catch((err) => {
+        toast.error("User not Registered")
+      });
+      const createStudent = ()=>{
+        if(imageCloudUrl){
+          axios({
+            method: "post",
+            url: "http://localhost:3000/api/students/signup",
+            data: {
+              ...studentsDetails,
+            },
+          })
+            .then((res) => {
+              console.log(res);
+              toast.success("Student Add Successfuly");
   
-
-    
-  
+              setFirstName("");
+              setlastName("");
+              setCourse("");
+              setEmail("");
+              setPassword("");
+              setPhoneNum("");
+              setImage("");
+            })
+            .catch((err) => console.log(err));
+        }
+      }
   };
 
   const uploadImage = () => {
@@ -84,11 +97,15 @@ export default function TextFieldSizes() {
 
   const handleImageSet = (e) => {
     const file = e.target.files[0];
-    setUserImageFile(file)
+    setUserImageFile(file);
     if (file) {
       setImage(URL.createObjectURL(file));
     }
   };
+
+  const gotoDashboard= ()=>{
+    redirect('/admin')
+  }
 
   return (
     <>
@@ -96,7 +113,7 @@ export default function TextFieldSizes() {
         sx={{ width: "100%", display: "flex", justifyContent: "space-between" }}
       >
         <div>
-          <h3 className={styles.addStdHead}>Add Student</h3>
+          <h3 className={styles.addStdHead}> <span  ><FaArrowLeft onClick={gotoDashboard}  className={styles.arrowBack}/></span>  Add Student</h3>
         </div>
         <div>
           <button onClick={AddStudent} className={styles.addBtn}>
@@ -144,7 +161,7 @@ export default function TextFieldSizes() {
       <Box
         component="form"
         sx={{
-          width: "100%", 
+          width: "100%",
           "& .MuiTextField-root": { m: 1, width: "30ch" },
           display: "flex",
           flexDirection: "column",
@@ -154,7 +171,7 @@ export default function TextFieldSizes() {
         noValidate
         autoComplete="off"
       >
-        <div className={styles.inputContainer} >
+        <div className={styles.inputContainer}>
           <TextField
             label="First Name"
             id="outlined-size-normal"
@@ -168,10 +185,9 @@ export default function TextFieldSizes() {
             onChange={(e) => setlastName(e.target.value)}
             value={lastName}
             md={12}
-
           />
-        </div >
-        <div className={styles.inputContainer} >
+        </div>
+        <div className={styles.inputContainer}>
           <TextField
             label="Course"
             id="outlined-size-normal"
@@ -186,7 +202,7 @@ export default function TextFieldSizes() {
             value={password}
           />
         </div>
-        <div className={styles.inputContainer} >
+        <div className={styles.inputContainer}>
           <TextField
             label="Email"
             id="outlined-size-normal"
@@ -203,5 +219,4 @@ export default function TextFieldSizes() {
       </Box>
     </>
   );
-      
-      }
+}

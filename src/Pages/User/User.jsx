@@ -73,9 +73,12 @@ export default function TextFieldSizes() {
         sx={{ width: "100%", display: "flex", justifyContent: "space-between" }}
       >
         <div>
-          <h3 className={styles.addStdHead}>User</h3>
+          <h3 className={styles.addStdHead}>{`${firstName}  ${lastName}`}</h3>
         </div>
-        
+        <div>
+        <h5 className={styles.addStdHead}>LogOut</h5>
+
+        </div>
       </Box>
       <Box
         sx={{

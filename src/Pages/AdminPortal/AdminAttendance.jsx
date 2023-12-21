@@ -1,80 +1,46 @@
-import React from "react";
+import React, { useState , useEffect } from "react";
+// import Portal from "../../Components/Portal/Portal";
 import styles from "./style.module.css";
 import { CiUser } from "react-icons/ci";
 import { LuUserSquare } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import { FaUser } from "react-icons/fa";
 import { FaPlusCircle } from "react-icons/fa";
-import Table from "../../Components/Table/table";
-import { useEffect, useState } from "react";
+import DataTable from "../../Components/MTable/Table";
 import axios from "axios";
-import Modal from "../../Components/Model/Modal";
+import Table from "../../Components/Table/table";
+import { useParams } from 'react-router-dom';
+
+
 
 const Adminportal = () => {
-  const [studentsData, setStudentsData] = useState();
-  const [openModal, setOpenModal] = useState(false);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setlastName] = useState("");
-  const [course, setCourse] = useState("");
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState();
-  const [phoneNumber, setPhoneNum] = useState("");
-
+  const[stdAttendance,setStdAttendance] = useState()
   const redirect = useNavigate();
+  const { id } = useParams();
+  console.log(id)
 
   useEffect(() => {
     axios({
       method: "get",
-      url: "http://localhost:3000/api/students/allstudents",
+      url: `http://localhost:3000/api/attendance/studentattendance/${id}`,
     })
       .then((res) => {
-        console.log(res);
-        setStudentsData(res.data.allStudents);
+        console.log(res.data.student);
+        setStdAttendance(res.data.student);
       })
       .catch((err) => console.log(err));
-  }, []);
-  const CloseModal = () => {
-    setOpenModal(!openModal);
+  }, [id]);
+
+
+
+  const watchStdAttendance = () => {
+    console.log("hello")
+    redirect("/attendance");
   };
-
-  const updateStudent = (id)=>{
-    console.log(id)
-    
-   const stdDetails = {
-    firstName,
-    lastName,
-    email,
-    phoneNumber,
-    course,
-    password
-   }
-   console.log(stdDetails)
-  }
-
-  const editStudent = (id)=>{
-    console.log("edit student" , id)
-    setOpenModal(true)
-  }
-
-  const watchStdAttendance = (id) => {
-    console.log("hello", id)
-    redirect(`/attendance/${id}`);
-  };
-
   return (
     <>
+      {/* <Portal/> */}
       <div className={styles.portalContainer}>
-        <Modal
-          open={openModal}
-          handleClose={CloseModal}
-          setFirstName={setFirstName}
-          setlastName={setlastName}
-          setCourse={setCourse}
-          setPassword={setPassword}
-          setEmail={setEmail}
-          setPhoneNum={setPhoneNum}
-          updateStudent={updateStudent}
-        />
         <div className={styles.sideBar}>
           <h2 className={styles.sidebarHeading}>SMIT</h2>
           <ul
@@ -84,7 +50,10 @@ const Adminportal = () => {
             }}
           >
             <div>
-              <li className={styles.listItem}>
+              <li
+                className={styles.listItem}
+                onClick={() => redirect("/admin")}
+              >
                 {" "}
                 <CiUser
                   style={{ color: "#3D7CF3", fontWeight: "bold", fontSize: 30 }}
@@ -97,10 +66,7 @@ const Adminportal = () => {
               </li>
             </div>
             <div>
-              <li
-                className={styles.listItem}
-                onClick={() => redirect("/attendance")}
-              >
+              <li className={styles.listItem}>
                 {" "}
                 <LuUserSquare
                   style={{ color: "#3D7CF3", fontWeight: "bold", fontSize: 30 }}
@@ -116,20 +82,17 @@ const Adminportal = () => {
         </div>
         <div className={styles.studentsData}>
           <div className={styles.portalHead}>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
+            <div style={{ display: "flex" }}>
               <FaUser
                 className={styles.stdIcon}
                 style={{ fontWeight: "bold", fontSize: 30 }}
               />
               <div>
-                <h3 style={{ marginLeft: 10, fontWeight: "bold" }}>Students</h3>
+                <h3 style={{ marginLeft: 10 }}>Attendance</h3>
               </div>
+            </div>
+            <div>
+              <h3 className={styles.adminPortalHead}>Admin Portal</h3>
             </div>
             <div
               style={{
@@ -150,17 +113,15 @@ const Adminportal = () => {
 
           <div style={{ marginTop: 20 }}>
             <Table
-              setOpenModal={setOpenModal}
               id="ID"
               profileImage="Profile Img"
               Name="Name"
-              courseName=" Course Name"
-              password="Password"
-              email="Email"
-              data={studentsData}
-              editStudent={editStudent}
+              checkinTime="Checked In Time"
+              checkoutTime="Checked out Time"
               watchStdAttendance={watchStdAttendance}
-            />
+              data={stdAttendance}
+            />  
+            {/* <DataTable /> */}
           </div>
         </div>
       </div>

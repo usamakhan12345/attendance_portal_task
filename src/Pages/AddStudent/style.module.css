@@ -20,6 +20,8 @@
     font-weight: 700;
     margin-top: 30px;
     margin-left: 20px;
+    color:#5C92F7;
+    padding: 4px 10px;
 }
 
 .cameraIcon{
@@ -39,7 +41,17 @@
 .inputContainer{
     text-align: center;
 }
-
+.arrowBack{
+    color: #5C92F7;
+    cursor: pointer;
+}
+.updateBtn {
+    background-color: #5C92F7 !important;
+    color: #ffffff !important;
+    width: 120px;
+    font-weight: bold;
+    margin-top: 20px !important;
+}
 @media only screen and  (max-width: 600px) {
     .MuiTextField-root {
       width: 100% !important;
