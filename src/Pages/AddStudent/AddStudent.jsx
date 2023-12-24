@@ -66,6 +66,7 @@ export default function TextFieldSizes() {
         toast.error("User not Registered")
       });
       const createStudent = ()=>{
+        console.log("usama khan")
         if(imageCloudUrl){
           axios({
             method: "post",

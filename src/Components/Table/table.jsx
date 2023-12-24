@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./style.module.css";
 import { FaEdit } from "react-icons/fa";
 import { IoEyeSharp } from "react-icons/io5";
@@ -16,9 +16,22 @@ const DynamicTable = ({
   checkoutTime,
   email,
   editStudent,
-  watchStdAttendance
-  
+  watchStdAttendance,
 }) => {
+  const [stdData, setStdData] = useState();
+  const [stdCheckIn, setStdCheckIn] = useState([]);
+  const [stdImage, setStdImage] = useState([]);
+  const [stdName, setName] = useState([]);
+  useEffect(() => {
+    setStdData(data);
+  }, [data]);
+  useEffect(() => {
+    if (data) {
+      setStdCheckIn(data?.checkInTime);
+      setName(`${data?.student?.firstName}` + " " + `${data?.student?.lastName}`);
+      setStdImage(data?.student?.Image);
+    }
+  }, [data]);
   return (
     <table style={{ width: "100%" }}>
       <thead className={styles.tableHead}>
@@ -28,45 +41,76 @@ const DynamicTable = ({
           <th>{Name}</th>
           <th>{courseName ?? checkinTime}</th>
           <th>{password ?? checkoutTime}</th>
-         { email && <th>{email ?? null}</th>}
-          <th>Edit </th>
-          <th>Watch</th>
+          {email && <th>{email ?? null}</th>}
+          {data?.email && <th> Edit </th>}
+          {data?.email && <th> Watch </th>}
+
         </tr>
       </thead>
       <tbody>
-        {data &&
-          data.map((item, index) => (
-            <tr key={index}>
-              <td>{index + 1}</td>
-              <td style={{textAlign : 'center'}}>
-                <img
-                  src={item?.Image}
-                  alt="Profile"
-                  style={{ width: "50px", height: "40px", borderRadius: "50%" }}
-                />
-              </td>
-              <td>{item?.firstName}</td>
-              <td>{item?.course}</td>
-              <td>
-                <input
-                  type="password"
-                  value={item?.password}
-                  className={styles.passInp}
-                  style={{ background: "none", border: "none" }}
-                />
-              </td>
-              <td>{item?.email}</td>
-              <td style={{textAlign : 'center'}}>
-                <FaEdit
-                  onClick={()=>editStudent(item._id)}
-                  className={styles.editIcon}
-                />
-              </td>
-              <td style={{textAlign : 'center'}}>
-                <FaEye onClick={()=>watchStdAttendance(item._id)} className={styles.eyeIcon} />
-              </td>
-            </tr>
-          ))}
+        {data?.checkInTime
+          ? data?.checkInTime.map((item, index) => (
+              <tr key={index}>
+                {console.log(item)}
+                <td>{index + 1}</td>
+                <td style={{ textAlign: "center" }}>
+                  <img
+                    src={stdImage}
+                    alt="Profile"
+                    style={{
+                      width: "50px",
+                      height: "40px",
+                      borderRadius: "50%",
+                    }}
+                  />
+                </td>
+                <td>{stdName}</td>
+                <td>{item}</td>
+                <td>{data?.checkOutTime[index]}</td>
+                <td>{item?.email ?? ""}</td>
+              </tr>
+            ))
+          : data &&
+            data.length > 0 &&
+            data.map((item, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td style={{ textAlign: "center" }}>
+                  <img
+                    src={item?.Image}
+                    alt="Profile"
+                    style={{
+                      width: "50px",
+                      height: "40px",
+                      borderRadius: "50%",
+                    }}
+                  />
+                </td>
+                <td>{item?.firstName}</td>
+                <td>{item?.course}</td>
+                <td>
+                  <input
+                    type="password"
+                    value={item?.password}
+                    className={styles.passInp}
+                    style={{ background: "none", border: "none" }}
+                  />
+                </td>
+                <td>{item?.email ?? ""}</td>
+                <td style={{ textAlign: "center" }}>
+                  <FaEdit
+                    onClick={() => editStudent(item._id)}
+                    className={styles.editIcon}
+                  />
+                </td>
+                <td style={{ textAlign: "center" }}>
+                  <FaEye
+                    onClick={() => watchStdAttendance(item._id)}
+                    className={styles.eyeIcon}
+                  />
+                </td>
+              </tr>
+            ))}
       </tbody>
     </table>
   );

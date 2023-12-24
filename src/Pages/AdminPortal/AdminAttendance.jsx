@@ -15,6 +15,8 @@ import { useParams } from 'react-router-dom';
 
 const Adminportal = () => {
   const[stdAttendance,setStdAttendance] = useState()
+  const[stdImage,setStdImage] = useState()
+  const[stdName,setStdName] = useState()
   const redirect = useNavigate();
   const { id } = useParams();
   console.log(id)
@@ -27,6 +29,8 @@ const Adminportal = () => {
       .then((res) => {
         console.log(res.data.student);
         setStdAttendance(res.data.student);
+        setStdImage(res.data.student.student.Image)
+        setStdName(res.data.student.student.firstName +  + res.data.student.student.lastName)
       })
       .catch((err) => console.log(err));
   }, [id]);
@@ -119,7 +123,7 @@ const Adminportal = () => {
               checkinTime="Checked In Time"
               checkoutTime="Checked out Time"
               watchStdAttendance={watchStdAttendance}
-              data={stdAttendance}
+              data={stdAttendance} 
             />  
             {/* <DataTable /> */}
           </div>

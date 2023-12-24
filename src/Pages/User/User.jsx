@@ -24,10 +24,12 @@ export default function TextFieldSizes() {
   const [userImageFile, setUserImageFile] = useState();
   const[imageCloudUrl, setImageCloudUrl] = useState()
   const[studentData, setStudentData] = useState()
+  const[checkin,setCheckIn] = useState(false)
+  const[lastCheckInTime,setLastCheckInTime] = useState()
 
   const imageInputref = useRef(0);
   const userimage = useRef(0);
-
+  const StudentId = localStorage.getItem("id")
   React.useEffect(()=>{
       const id = localStorage.getItem('id')
       if(id){
@@ -47,14 +49,62 @@ export default function TextFieldSizes() {
           
         }).catch(err => console.log(err.response))
       }
+      const usercheckin = localStorage.getItem("usercheckin")
+      console.log(usercheckin)
+      if(usercheckin){
+        console.log(usercheckin)
+        setLastCheckInTime(usercheckin)
+        setCheckIn(true)
+      }
 
+  }, [lastCheckInTime])
 
-  }, [])
+  const ButtonDisableHandler = ()=>{
+    // if(!lastCheckInTime){
+    //   return false
+    // }
+    const currTime = new Date().getTime()
+    console.log(currTime)
+    console.log(lastCheckInTime)
+    const difference = currTime - lastCheckInTime
+    console.log(difference)
+    const hoursDiff = difference / (100 * 60 * 60)
+    console.log(hoursDiff)
+
+    if(hoursDiff < 22){
+      return true
+      
+    }else{
+      // localStorage.removeItem("usercheckin")
+
+      return false
+    }
+
+  }
 
   const UserChecked = ()=>{
-    console.log("hello")
-    const nDate = moment().startOf('hour').fromNow(); 
-    console.log(nDate)
+    axios
+    .post('http://localhost:3000/api/attendance/checkedIn', {
+      student: StudentId,
+      location: 'SMIT',
+      checktype : checkin ? "checkout" : "checkin"
+    })
+    .then((res)=>{
+      console.log(res)
+      console.log(res.data.message.includes("check in"))
+      if(res.data.message.includes("check in")){
+        setCheckIn(true)
+        // localStorage.setItem("usercheckin" , new Date().getTime())
+      }else{
+        localStorage.setItem("usercheckin" , new Date().getTime())
+        console.log("test21")
+        setCheckIn(false)
+
+      }
+      console.log(checkin)
+    }).catch((error)=>{
+      console.log(error)
+    })
   }
   const uploadImage = () => {
     imageInputref.current.click();
@@ -67,6 +117,8 @@ export default function TextFieldSizes() {
       setImage(URL.createObjectURL(file));
     }
   };
+
+  console.log(ButtonDisableHandler())
   return (
     <>
       <Box
@@ -118,7 +170,7 @@ export default function TextFieldSizes() {
       </Box>
 
       <Box
-        component="form"
+        // component="form"
         sx={{
           width: "100%", 
           "& .MuiTextField-root": { m: 1, width: "25ch" },
@@ -192,7 +244,7 @@ export default function TextFieldSizes() {
 
           />
         </div>
-        <button onClick={UserChecked} className={styles.checkinBtn}>Checked In</button>
+        <button disabled={ButtonDisableHandler()} onClick={UserChecked} className={styles.checkinBtn}>{ checkin ? " Checked Out" : "Checked In"}</button>
       </Box>
     </>
   );
