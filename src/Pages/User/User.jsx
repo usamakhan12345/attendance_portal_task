@@ -4,11 +4,12 @@ import TextField from "@mui/material/TextField";
 import styles from "./style.module.css";
 import { FaCamera } from "react-icons/fa";
 import { useState } from "react";
-import { useRef } from "react";
+import { useRef , useEffect} from "react";
 import UserImage from "../../assets/userimage.jpg";
 import axios from 'axios'
 import {toast} from 'react-toastify'
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -30,6 +31,17 @@ export default function TextFieldSizes() {
   const imageInputref = useRef(0);
   const userimage = useRef(0);
   const StudentId = localStorage.getItem("id")
+
+  const redirect = useNavigate()
+
+  useEffect(()=>{
+     const stdId =  localStorage.getItem("id")
+     if(!stdId){
+      redirect("/")
+     }
+
+  },[])
+
   React.useEffect(()=>{
       const id = localStorage.getItem('id')
       if(id){
@@ -59,7 +71,7 @@ export default function TextFieldSizes() {
 
   }, [lastCheckInTime])
 
-  const ButtonDisableHandler = ()=>{
+  const ButtonDisableHandler = ()=>{  
     // if(!lastCheckInTime){
     //   return false
     // }
@@ -72,6 +84,7 @@ export default function TextFieldSizes() {
     console.log(hoursDiff)
 
     if(hoursDiff < 22){
+      console.log("btn disable hona chahiye")
       return true
       
     }else{
@@ -96,6 +109,10 @@ export default function TextFieldSizes() {
         setCheckIn(true)
         // localStorage.setItem("usercheckin" , new Date().getTime())
       }else{
+         const prevTime =  localStorage.getItem("usercheckin")
+         if(prevTime){
+          localStorage.removeItem("usercheckin")
+         }
         localStorage.setItem("usercheckin" , new Date().getTime())
         console.log("test21")
         setCheckIn(false)
@@ -117,6 +134,11 @@ export default function TextFieldSizes() {
       setImage(URL.createObjectURL(file));
     }
   };
+  const userLogOut = ()=>{
+    localStorage.removeItem('id')
+    localStorage.removeItem("token")
+    redirect("/")
+  }
 
   console.log(ButtonDisableHandler())
   return (
@@ -125,10 +147,11 @@ export default function TextFieldSizes() {
         sx={{ width: "100%", display: "flex", justifyContent: "space-between" }}
       >
         <div>
-          <h3 className={styles.addStdHead}>{`${firstName}  ${lastName}`}</h3>
+          <h3 className={styles.addStdHead}>{`${firstName ?? ""}  ${lastName ?? ""}`}</h3>
         </div>
         <div>
-        <h5 className={styles.addStdHead}>LogOut</h5>
+        {/* <h5>LogOut</h5> */}
+        <button onClick={userLogOut}   className={styles.addStdHead}>LogOut</button>
 
         </div>
       </Box>
@@ -244,7 +267,7 @@ export default function TextFieldSizes() {
 
           />
         </div>
-        <button disabled={ButtonDisableHandler()} onClick={UserChecked} className={styles.checkinBtn}>{ checkin ? " Checked Out" : "Checked In"}</button>
+        <button disabled={()=>ButtonDisableHandler()} onClick={UserChecked} className={styles.checkinBtn}>{ checkin ? " Checked Out" : "Checked In"}</button>
       </Box>
     </>
   );

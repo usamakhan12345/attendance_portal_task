@@ -66,7 +66,7 @@ const DynamicTable = ({
                 </td>
                 <td>{stdName}</td>
                 <td>{item}</td>
-                <td>{data?.checkOutTime[index]}</td>
+                <td>{data?.checkOutTime[index]}</td>  
                 <td>{item?.email ?? ""}</td>
               </tr>
             ))

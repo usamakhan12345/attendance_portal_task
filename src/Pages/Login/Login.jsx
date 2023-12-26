@@ -35,10 +35,12 @@ export default function BasicTextFields() {
       if (res.data.user) {
         localStorage.setItem('token', res.data.token)
         localStorage.setItem('id', res.data.id)
+        toast.success("User Login Successfuly")
         navigate('/user')
 
       } else {
         localStorage.setItem('id', res.data.id)
+        toast.success("Admin Login Successfuly")
 
         navigate('/admin')
       }

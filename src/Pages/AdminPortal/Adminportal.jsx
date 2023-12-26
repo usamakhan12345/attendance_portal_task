@@ -22,6 +22,16 @@ const Adminportal = () => {
 
   const redirect = useNavigate();
 
+  
+//   useEffect(()=>{
+//     const stdId =  localStorage.getItem("id")
+//     if(!stdId){
+//      redirect("/")
+//     }
+
+//  },[])
+
+
   useEffect(() => {
     axios({
       method: "get",

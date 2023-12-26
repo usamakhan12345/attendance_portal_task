@@ -58,8 +58,10 @@ export default function TextFieldSizes() {
         console.log(res);
         console.log(res.data.url);
         setImageCloudUrl(res.data.url);
+        setTimeout(()=>{
         createStudent()
-      
+
+        },500)
        
       })
       .catch((err) => {
@@ -67,6 +69,7 @@ export default function TextFieldSizes() {
       });
       const createStudent = ()=>{
         console.log("usama khan")
+        console.log(imageCloudUrl)
         if(imageCloudUrl){
           axios({
             method: "post",

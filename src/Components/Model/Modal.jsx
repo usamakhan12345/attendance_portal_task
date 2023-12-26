@@ -1,26 +1,27 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import styles from "../../Pages/AddStudent/style.module.css";
 import ModalStyles from "./style.module.css";
 import TextField from "@mui/material/TextField";
-import { useState } from "react";
+import { FaUser } from "react-icons/fa";
+
 
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: "50%",
 
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
   borderColor: "white",
-  overflowY: "scroll",
+  // overflowY: "scroll",
+  border : '10px solid #3498db ', 
   height: 550,
 };
 
@@ -33,7 +34,7 @@ export default function BasicModal({
   setPassword,
   setEmail,
   setPhoneNum,
-  updateStudent
+  updateStudent,
 }) {
   return (
     <div>
@@ -44,7 +45,17 @@ export default function BasicModal({
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <h3 className={ModalStyles.updateHead}>Update Student</h3>
+          <div className={ModalStyles.headContainer}>
+            <div>
+              <FaUser
+                className={styles.stdIcon}
+                style={{ fontWeight: "bold", fontSize: 40 , color : "#3498db" }}
+              />
+            </div>
+            <div>
+              <h3 className={ModalStyles.updateHead}>Update Student</h3>
+            </div>
+          </div>
           <Box
             component="form"
             sx={{
@@ -103,8 +114,13 @@ export default function BasicModal({
                 onChange={(e) => setPhoneNum(e.target.value)}
                 // value={phoneNumber}
               />
-              <Button onClick={()=>updateStudent(4)} className={styles.updateBtn}>Update</Button>
             </div>
+            <Button
+              onClick={() => updateStudent(4)}
+              className={ModalStyles.updateBtn}
+            >
+              Update
+            </Button>
           </Box>
         </Box>
       </Modal>

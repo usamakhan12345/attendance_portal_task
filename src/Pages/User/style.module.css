@@ -25,6 +25,10 @@
     font-size: 30px;
     text-align: center !important;
     text-transform: uppercase;
+    border: none;
+}
+.addStdHead:active{
+    opacity: 0.5;
 }
 
 .cameraIcon{
