@@ -9,9 +9,12 @@ import Table from "../../Components/Table/table";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Modal from "../../Components/Model/Modal";
+import {useGetStudentDataQuery} from "../../Components/redux/slices/apiSlice"
+import {students} from "../../Components/redux/slices/studentSlice"
+import { useDispatch , useSelector } from "react-redux";
 
 const Adminportal = () => {
-  const [studentsData, setStudentsData] = useState();
+  const [studentsData, setStudentsData] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setlastName] = useState("");
@@ -21,28 +24,24 @@ const Adminportal = () => {
   const [phoneNumber, setPhoneNum] = useState("");
 
   const redirect = useNavigate();
-
+  const dispatch = useDispatch()
+  const{ data , error  , isLoading} = useGetStudentDataQuery("allstudents")
+  const allStudents = useSelector((state)=> state.studentsData.students[0])
+  console.log(allStudents)
   
-//   useEffect(()=>{
-//     const stdId =  localStorage.getItem("id")
-//     if(!stdId){
-//      redirect("/")
-//     }
+useEffect(()=>{
+    if(data){
 
-//  },[])
+      dispatch(students(data.allStudents))
+    }
+} , [isLoading , data])
 
+useEffect(()=>{
+    if(allStudents){
+      setStudentsData(allStudents)
+    }
+},[allStudents , data])
 
-  useEffect(() => {
-    axios({
-      method: "get",
-      url: "http://localhost:3000/api/students/allstudents",
-    })
-      .then((res) => {
-        console.log(res);
-        setStudentsData(res.data.allStudents);
-      })
-      .catch((err) => console.log(err));
-  }, []);
   const CloseModal = () => {
     setOpenModal(!openModal);
   };

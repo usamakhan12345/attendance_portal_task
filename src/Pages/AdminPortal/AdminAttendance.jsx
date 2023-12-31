@@ -1,4 +1,4 @@
-import React, { useState , useEffect } from "react";
+import React, { useState, useEffect } from "react";
 // import Portal from "../../Components/Portal/Portal";
 import styles from "./style.module.css";
 import { CiUser } from "react-icons/ci";
@@ -9,36 +9,31 @@ import { FaPlusCircle } from "react-icons/fa";
 import DataTable from "../../Components/MTable/Table";
 import axios from "axios";
 import Table from "../../Components/Table/table";
-import { useParams } from 'react-router-dom';
-
-
+import { useParams } from "react-router-dom";
+import { useGetStudentAttendanceQuery } from "../../Components/redux/slices/apiSlice";
 
 const Adminportal = () => {
-  const[stdAttendance,setStdAttendance] = useState()
-  const[stdImage,setStdImage] = useState()
-  const[stdName,setStdName] = useState()
+  const [stdAttendance, setStdAttendance] = useState();
+  const [stdImage, setStdImage] = useState();
+  const [stdName, setStdName] = useState();
   const redirect = useNavigate();
   const { id } = useParams();
-  console.log(id)
+  console.log(id);
 
+  const { data, error, isLoading } = useGetStudentAttendanceQuery(id);
   useEffect(() => {
-    axios({
-      method: "get",
-      url: `http://localhost:3000/api/attendance/studentattendance/${id}`,
-    })
-      .then((res) => {
-        console.log(res.data.student);
-        setStdAttendance(res.data.student);
-        setStdImage(res.data.student.student.Image)
-        setStdName(res.data.student.student.firstName +  + res.data.student.student.lastName)
-      })
-      .catch((err) => console.log(err));
-  }, [id]);
-
-
+    if (data) {
+      setStdAttendance(data.student);
+      setStdImage(data.student.student.Image);
+      setStdName(
+        data.student.student.firstName + +data.student.student.lastName
+      );
+    }
+    console.log(error);
+  }, [id, data]);
 
   const watchStdAttendance = () => {
-    console.log("hello")
+    console.log("hello");
     redirect("/attendance");
   };
   return (
@@ -123,8 +118,8 @@ const Adminportal = () => {
               checkinTime="Checked In Time"
               checkoutTime="Checked out Time"
               watchStdAttendance={watchStdAttendance}
-              data={stdAttendance} 
-            />  
+              data={stdAttendance}
+            />
             {/* <DataTable /> */}
           </div>
         </div>

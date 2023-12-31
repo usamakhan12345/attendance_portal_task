@@ -107,7 +107,7 @@ export default function TextFieldSizes() {
       console.log(res.data.message.includes("check in"))
       if(res.data.message.includes("check in")){
         setCheckIn(true)
-        // localStorage.setItem("usercheckin" , new Date().getTime())
+        localStorage.setItem("usercheckin" , new Date().getTime())
       }else{
          const prevTime =  localStorage.getItem("usercheckin")
          if(prevTime){
@@ -267,7 +267,7 @@ export default function TextFieldSizes() {
 
           />
         </div>
-        <button disabled={()=>ButtonDisableHandler()} onClick={UserChecked} className={styles.checkinBtn}>{ checkin ? " Checked Out" : "Checked In"}</button>
+        <button  onClick={UserChecked} className={styles.checkinBtn}>{ checkin ? " Checked Out" : "Checked In"}</button>
       </Box>
     </>
   );

@@ -12,10 +12,7 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-
-
-
-
+import { useAddStudentMutation } from "../../Components/redux/slices/apiSlice";
 
 export default function TextFieldSizes() {
   const [firstName, setFirstName] = useState();
@@ -31,8 +28,10 @@ export default function TextFieldSizes() {
   const imageInputref = useRef(0);
   const userImage = useRef(0);
   const theme = useTheme();
-  const redirect = useNavigate()
+  const redirect = useNavigate();
+  const [addStudent] = useAddStudentMutation();
 
+  console.log(addStudent);
   const isMediumScreen = useMediaQuery(theme.breakpoints.up("md"));
 
   const AddStudent = () => {
@@ -58,41 +57,43 @@ export default function TextFieldSizes() {
         console.log(res);
         console.log(res.data.url);
         setImageCloudUrl(res.data.url);
-        setTimeout(()=>{
-        createStudent()
-
-        },500)
-       
+        setTimeout(() => {
+          createStudent();
+        }, 500);
       })
       .catch((err) => {
-        toast.error("User not Registered")
+        toast.error("User not Registered");
       });
-      const createStudent = ()=>{
-        console.log("usama khan")
-        console.log(imageCloudUrl)
-        if(imageCloudUrl){
-          axios({
-            method: "post",
-            url: "http://localhost:3000/api/students/signup",
-            data: {
-              ...studentsDetails,
-            },
-          })
-            .then((res) => {
-              console.log(res);
-              toast.success("Student Add Successfuly");
-  
-              setFirstName("");
-              setlastName("");
-              setCourse("");
-              setEmail("");
-              setPassword("");
-              setPhoneNum("");
-              setImage("");
-            })
-            .catch((err) => console.log(err));
-        }
-      }
+    const createStudent = async () => {
+      console.log("usama khan");
+      console.log(imageCloudUrl);
+      console.log(studentsDetails);
+      const { data, error } = await addStudent({ ...studentsDetails });
+      console.log("data from query", data);
+      console.log(error);
+      // if(imageCloudUrl){
+      //   axios({
+      //     method: "post",
+      //     url: "http://localhost:3000/api/students/signup",
+      //     data: {
+      //       ...studentsDetails,
+      //     },
+      //   })
+      //     .then((res) => {
+      //       console.log(res);
+      //       toast.success("Student Add Successfuly");
+
+      //       setFirstName("");
+      //       setlastName("");
+      //       setCourse("");
+      //       setEmail("");
+      //       setPassword("");
+      //       setPhoneNum("");
+      //       setImage("");
+      //     })
+      //     .catch((err) => console.log(err));
+      // }
+    };
   };
 
   const uploadImage = () => {
@@ -107,9 +108,9 @@ export default function TextFieldSizes() {
     }
   };
 
-  const gotoDashboard= ()=>{
-    redirect('/admin')
-  }
+  const gotoDashboard = () => {
+    redirect("/admin");
+  };
 
   return (
     <>
@@ -117,7 +118,16 @@ export default function TextFieldSizes() {
         sx={{ width: "100%", display: "flex", justifyContent: "space-between" }}
       >
         <div>
-          <h3 className={styles.addStdHead}> <span  ><FaArrowLeft onClick={gotoDashboard}  className={styles.arrowBack}/></span>  Add Student</h3>
+          <h3 className={styles.addStdHead}>
+            {" "}
+            <span>
+              <FaArrowLeft
+                onClick={gotoDashboard}
+                className={styles.arrowBack}
+              />
+            </span>{" "}
+            Add Student
+          </h3>
         </div>
         <div>
           <button onClick={AddStudent} className={styles.addBtn}>
