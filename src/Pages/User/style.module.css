@@ -52,3 +52,12 @@
     font-weight: bold;
     padding: 10px 15px;
 }
+.checkoutBtn{
+    background-color: red;
+    border: red;
+    color: #ffffff;
+    font-weight: bold;
+    padding: 10px 15px;
+
+
+}

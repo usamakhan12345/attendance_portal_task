@@ -18,16 +18,14 @@ const Adminportal = () => {
   const [stdName, setStdName] = useState();
   const redirect = useNavigate();
   const { id } = useParams();
-  console.log(id);
-
-  const { data, error, isLoading } = useGetStudentAttendanceQuery(id);
+    
+    const { data, error, isLoading } = useGetStudentAttendanceQuery(id);
+    console.log(data)
+    console.log(error)
   useEffect(() => {
     if (data) {
-      setStdAttendance(data.student);
-      setStdImage(data.student.student.Image);
-      setStdName(
-        data.student.student.firstName + +data.student.student.lastName
-      );
+      setStdAttendance(data?.stdAttendance);
+     
     }
     console.log(error);
   }, [id, data]);
@@ -40,7 +38,7 @@ const Adminportal = () => {
     <>
       {/* <Portal/> */}
       <div className={styles.portalContainer}>
-        <div className={styles.sideBar}>
+        {/* <div className={styles.sideBar}>
           <h2 className={styles.sidebarHeading}>SMIT</h2>
           <ul
             style={{
@@ -78,7 +76,7 @@ const Adminportal = () => {
               </li>
             </div>
           </ul>
-        </div>
+        </div> */}
         <div className={styles.studentsData}>
           <div className={styles.portalHead}>
             <div style={{ display: "flex" }}>

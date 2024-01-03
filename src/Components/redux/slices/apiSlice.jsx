@@ -7,17 +7,29 @@ export const StudentDataApi = createApi({
     getStudentData: builder.query({
       query: (type) => `students/${type}`,
     }),
-    getStudentAttendance : builder.query({
-      query : (id) => `/attendance/studentattendance/${id}`
+    getStudentAttendance: builder.query({
+      query: (id) => `/attendance/getStudentAttendance/${id}`
     }),
-    addStudent : builder.mutation({
-        query : ({studentsDetails})=>({
-            url : "/students/signup",
-            method : "POST",
-            body : studentsDetails
-        })
+    addStudent: builder.mutation({
+      query: ({ ...studentsDetails }) => ({
+        url: "/students/signup",
+        method: "POST",
+        body: studentsDetails
+      })
+    }),
+    getSingleStudent: builder.query({
+      query: (id) => `/students/getstudent/${id}`
+    }),
+    updateStudentData: builder.mutation({
+      query: ({id , ...stdDetails}) => ({
+        url: `/students/updatestudent/${id}`,
+        method: "PUT",
+        body: stdDetails
+
+
+      })
     })
   }),
 });
 
-export const { useGetStudentDataQuery , useAddStudentMutation , useGetStudentAttendanceQuery} = StudentDataApi;
+export const { useGetStudentDataQuery, useAddStudentMutation, useGetStudentAttendanceQuery, useGetSingleStudentQuery , useUpdateStudentDataMutation } = StudentDataApi;

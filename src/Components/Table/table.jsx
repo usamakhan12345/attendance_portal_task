@@ -33,7 +33,7 @@ const DynamicTable = ({
     }
   }, [data]);
   return (
-    <table style={{ width: "100%" }}>
+    <table style={{ width: "100%"  , tableLayout : 'auto', borderCollapse : 'collapse'}}>
       <thead className={styles.tableHead}>
         <tr className={styles.tableHead}>
           <th>{id}</th>
@@ -42,8 +42,9 @@ const DynamicTable = ({
           <th>{courseName ?? checkinTime}</th>
           <th>{password ?? checkoutTime}</th>
           {email && <th>{email ?? null}</th>}
-          {data?.email && <th> Edit </th>}
-          {data?.email && <th> Watch </th>}
+          {email && <th> Edit </th>}
+          {email && <th> Watch </th>}
+       
 
         </tr>
       </thead>
@@ -99,13 +100,13 @@ const DynamicTable = ({
                 <td>{item?.email ?? ""}</td>
                 <td style={{ textAlign: "center" }}>
                   <FaEdit
-                    onClick={() => editStudent(item._id)}
+                    onClick={() => editStudent(item)}
                     className={styles.editIcon}
                   />
                 </td>
                 <td style={{ textAlign: "center" }}>
                   <FaEye
-                    onClick={() => watchStdAttendance(item._id)}
+                    onClick={() => watchStdAttendance(item._id )}
                     className={styles.eyeIcon}
                   />
                 </td>

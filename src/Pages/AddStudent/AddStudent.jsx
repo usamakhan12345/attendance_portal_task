@@ -23,7 +23,7 @@ export default function TextFieldSizes() {
   const [phoneNumber, setPhoneNum] = useState();
   const [Image, setImage] = useState();
   const [userImageFile, setUserImageFile] = useState();
-  const [imageCloudUrl, setImageCloudUrl] = useState();
+  const [imageCloudUrl, setImageCloudUrl] = useState("");
 
   const imageInputref = useRef(0);
   const userImage = useRef(0);
@@ -31,10 +31,11 @@ export default function TextFieldSizes() {
   const redirect = useNavigate();
   const [addStudent] = useAddStudentMutation();
 
-  console.log(addStudent);
-  const isMediumScreen = useMediaQuery(theme.breakpoints.up("md"));
 
   const AddStudent = () => {
+
+    const formData = new FormData();
+    formData.append("file", userImageFile);
     const studentsDetails = {
       firstName,
       lastName,
@@ -44,10 +45,6 @@ export default function TextFieldSizes() {
       phoneNumber,
       Image: imageCloudUrl,
     };
-    console.log(studentsDetails);
-    const formData = new FormData();
-    formData.append("file", userImageFile);
-
     axios({
       method: "post",
       url: "http://localhost:3000/api/upload",
@@ -57,43 +54,27 @@ export default function TextFieldSizes() {
         console.log(res);
         console.log(res.data.url);
         setImageCloudUrl(res.data.url);
-        setTimeout(() => {
-          createStudent();
-        }, 500);
+        const createStudents = async () => {
+          const { data, error } = await addStudent({ ...studentsDetails, Image: res.data.url });
+          if (data) {
+            setFirstName("");
+            setlastName("");
+            setCourse("");
+            setEmail("");
+            setPassword("");
+            setPhoneNum("");
+            setImage("");
+          }else{
+            toast.error("User Not Registered")
+          }
+
+        }
+        createStudents();
       })
       .catch((err) => {
         toast.error("User not Registered");
       });
-    const createStudent = async () => {
-      console.log("usama khan");
-      console.log(imageCloudUrl);
-      console.log(studentsDetails);
-      const { data, error } = await addStudent({ ...studentsDetails });
-      console.log("data from query", data);
-      console.log(error);
-      // if(imageCloudUrl){
-      //   axios({
-      //     method: "post",
-      //     url: "http://localhost:3000/api/students/signup",
-      //     data: {
-      //       ...studentsDetails,
-      //     },
-      //   })
-      //     .then((res) => {
-      //       console.log(res);
-      //       toast.success("Student Add Successfuly");
-
-      //       setFirstName("");
-      //       setlastName("");
-      //       setCourse("");
-      //       setEmail("");
-      //       setPassword("");
-      //       setPhoneNum("");
-      //       setImage("");
-      //     })
-      //     .catch((err) => console.log(err));
-      // }
-    };
+   
   };
 
   const uploadImage = () => {
@@ -191,7 +172,7 @@ export default function TextFieldSizes() {
             id="outlined-size-normal"
             onChange={(e) => setFirstName(e.target.value)}
             value={firstName}
-            // className={styles.textfield}
+          // className={styles.textfield}
           />
           <TextField
             label="Last Name"

@@ -6,6 +6,7 @@ import styles from "../../Pages/AddStudent/style.module.css";
 import ModalStyles from "./style.module.css";
 import TextField from "@mui/material/TextField";
 import { FaUser } from "react-icons/fa";
+import { Input } from '@mui/material';
 
 
 const style = {
@@ -28,14 +29,37 @@ const style = {
 export default function BasicModal({
   open,
   handleClose,
-  setFirstName,
-  setlastName,
-  setCourse,
-  setPassword,
-  setEmail,
-  setPhoneNum,
-  updateStudent,
+    updateStudent,
+  studentData
 }) {
+  console.log(studentData)
+  const[stdFirsttName,setStdFirstName] = React.useState()
+  const[stdLastName, setStdLastName] = React.useState()
+  const[stdEmail, setStdEmail] = React.useState()
+  const[stdCourse, setStdCourse] = React.useState()
+  const[stdPassword, setStdPassword] = React.useState()
+  const[stdPhoneNumber, setStdPhoneNumber] = React.useState()
+
+    React.useEffect(()=>{
+      setStdFirstName(studentData?.firstName)
+      setStdLastName(studentData?.lastName)
+      setStdEmail(studentData?.email)
+      setStdCourse(studentData?.course)
+      setStdPassword(studentData?.password)
+      setStdPhoneNumber(studentData?.phoneNumber)
+
+    },[studentData , open ])
+    console.log(stdFirsttName)
+
+    const studentDetails ={
+      firstName : stdFirsttName,
+       lastName : stdLastName ,
+       email : stdEmail, 
+       phoneNumber : stdPhoneNumber ,
+       course : stdCourse,
+       password : stdPassword
+    }
+
   return (
     <div>
       <Modal
@@ -74,15 +98,16 @@ export default function BasicModal({
               <TextField
                 label="First Name"
                 id="outlined-size-normal"
-                onChange={(e) => setFirstName(e.target.value)}
-                // value={firstName}
+                onChange={(e) => setStdFirstName(e.target.value)}
+                defaultValue={studentData?.firstName || ""}
                 // className={styles.textfield}
+                value={stdFirsttName}
               />
               <TextField
                 label="Last Name"
                 id="outlined-size-normal"
-                onChange={(e) => setlastName(e.target.value)}
-                // value={lastName}
+                onChange={(e) => setStdLastName(e.target.value)}
+                value={stdLastName}
                 md={12}
               />
             </div>
@@ -90,33 +115,39 @@ export default function BasicModal({
               <TextField
                 label="Course"
                 id="outlined-size-normal"
-                onChange={(e) => setCourse(e.target.value)}
-                // value={course}
+                onChange={(e) => setStdCourse(e.target.value)}
+                value={stdCourse}
+
               />
               <TextField
                 label="Password"
                 id="outlined-size-normal"
                 type="password"
-                onChange={(e) => setPassword(e.target.value)}
-                // value={password}
+                onChange={(e) => setStdPassword(e.target.value)}
+                value={stdPassword}
+
               />
             </div>
             <div className={styles.inputContainer}>
               <TextField
                 label="Email"
                 id="outlined-size-normal"
-                onChange={(e) => setEmail(e.target.value)}
-                // value={email}
+                onChange={(e) => setStdEmail(e.target.value)}
+                value={stdEmail}
+
               />
               <TextField
                 label="Phone Number"
                 id="outlined-size-normal"
-                onChange={(e) => setPhoneNum(e.target.value)}
-                // value={phoneNumber}
+                onChange={(e) => setStdPhoneNumber(e.target.value)}
+                value={stdPhoneNumber}
+
+                
+
               />
             </div>
             <Button
-              onClick={() => updateStudent(4)}
+              onClick={() => updateStudent(studentData._id, studentDetails)}
               className={ModalStyles.updateBtn}
             >
               Update

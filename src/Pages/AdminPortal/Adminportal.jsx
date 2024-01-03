@@ -9,59 +9,64 @@ import Table from "../../Components/Table/table";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Modal from "../../Components/Model/Modal";
-import {useGetStudentDataQuery} from "../../Components/redux/slices/apiSlice"
-import {students} from "../../Components/redux/slices/studentSlice"
-import { useDispatch , useSelector } from "react-redux";
+import { useGetStudentDataQuery, useGetSingleStudentQuery, useUpdateStudentDataMutation } from "../../Components/redux/slices/apiSlice"
+import { students } from "../../Components/redux/slices/studentSlice"
+import { useDispatch, useSelector } from "react-redux";
+import {toast} from 'react-toastify'
 
 const Adminportal = () => {
   const [studentsData, setStudentsData] = useState([]);
   const [openModal, setOpenModal] = useState(false);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setlastName] = useState("");
-  const [course, setCourse] = useState("");
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState();
-  const [phoneNumber, setPhoneNum] = useState("");
+  const [studentUpdatedData, setStudentUpdatedData] = useState()
 
   const redirect = useNavigate();
   const dispatch = useDispatch()
-  const{ data , error  , isLoading} = useGetStudentDataQuery("allstudents")
-  const allStudents = useSelector((state)=> state.studentsData.students[0])
-  console.log(allStudents)
-  
-useEffect(()=>{
+  const { data, error, isLoading } = useGetStudentDataQuery("allstudents")
+  const allStudents = useSelector((state) => state.studentsData.students[0])
+    console.log("data---> direct query",data)
+  console.log(data)
+  const [updateStudentData] = useUpdateStudentDataMutation()
+
+  const updateStudent = async (id , studentDetails) => {
+    console.log(id)
+    console.log(studentDetails)
+     const { data, error, isLoading } = await updateStudentData( {id , ...studentDetails })
+    console.log(data.message)
     if(data){
-
-      dispatch(students(data.allStudents))
+      setOpenModal(!openModal)
+      toast.success(data.message)
     }
-} , [isLoading , data])
+    console.log(error)
+    toast.error(error.message)
 
-useEffect(()=>{
-    if(allStudents){
-      setStudentsData(allStudents)
-    }
-},[allStudents , data])
+  }
+
 
   const CloseModal = () => {
     setOpenModal(!openModal);
+    console.log("modal change")
+
   };
+  useEffect(() => {
+    if (data) {
 
-  const updateStudent = (id)=>{
-    console.log(id)
-    
-   const stdDetails = {
-    firstName,
-    lastName,
-    email,
-    phoneNumber,
-    course,
-    password
-   }
-   console.log(stdDetails)
-  }
+      dispatch(students(data.allStudents))
+    }
+  }, [isLoading, data , openModal , updateStudent  , CloseModal])
 
-  const editStudent = (id)=>{
-    console.log("edit student" , id)
+  useEffect(() => {
+    if (allStudents) {
+      setStudentsData(allStudents)
+    }
+  }, [allStudents, data , openModal ])
+
+
+
+
+
+  const editStudent = (item) => {
+    console.log("edit student", item)
+    setStudentUpdatedData(item)
     setOpenModal(true)
   }
 
@@ -76,15 +81,10 @@ useEffect(()=>{
         <Modal
           open={openModal}
           handleClose={CloseModal}
-          setFirstName={setFirstName}
-          setlastName={setlastName}
-          setCourse={setCourse}
-          setPassword={setPassword}
-          setEmail={setEmail}
-          setPhoneNum={setPhoneNum}
           updateStudent={updateStudent}
+          studentData={studentUpdatedData}
         />
-        <div className={styles.sideBar}>
+        {/* <div className={styles.sideBar}>
           <h2 className={styles.sidebarHeading}>SMIT</h2>
           <ul
             style={{
@@ -122,7 +122,7 @@ useEffect(()=>{
               </li>
             </div>
           </ul>
-        </div>
+        </div> */}
         <div className={styles.studentsData}>
           <div className={styles.portalHead}>
             <div

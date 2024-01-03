@@ -41,6 +41,10 @@ export default function TextFieldSizes() {
      }
 
   },[])
+  useEffect(()=>{
+    const userCheckIn = localStorage.getItem("usercheckin")
+    setLastCheckInTime(userCheckIn)
+  } , [checkin])
 
   React.useEffect(()=>{
       const id = localStorage.getItem('id')
@@ -50,7 +54,6 @@ export default function TextFieldSizes() {
           url: `http://localhost:3000/api/students/getstudent/${id}`,
           
         }).then((res)=>{
-          console.log(res.data.studentData)
           setStudentData(res.data.studentData)
           setFirstName(res.data.studentData.firstName)
           setlastName(res.data.studentData.lastName)
@@ -62,35 +65,41 @@ export default function TextFieldSizes() {
         }).catch(err => console.log(err.response))
       }
       const usercheckin = localStorage.getItem("usercheckin")
-      console.log(usercheckin)
       if(usercheckin){
-        console.log(usercheckin)
         setLastCheckInTime(usercheckin)
-        setCheckIn(true)
+        // setCheckIn(true)
       }
 
-  }, [lastCheckInTime])
+  }, [lastCheckInTime ])
 
   const ButtonDisableHandler = ()=>{  
     // if(!lastCheckInTime){
     //   return false
     // }
-    const currTime = new Date().getTime()
-    console.log(currTime)
-    console.log(lastCheckInTime)
-    const difference = currTime - lastCheckInTime
-    console.log(difference)
-    const hoursDiff = difference / (100 * 60 * 60)
-    console.log(hoursDiff)
-
-    if(hoursDiff < 22){
-      console.log("btn disable hona chahiye")
-      return true
-      
-    }else{
-      // localStorage.removeItem("usercheckin")
-
+    const checkOutTime = localStorage.getItem("usercheckout")
+    if(!lastCheckInTime){
       return false
+    }
+    if(lastCheckInTime){
+      // const usercheckinTime = localStorage.getItem("usercheckin")
+
+      const currTime = new Date().getTime()
+      const difference = currTime - lastCheckInTime
+      const hoursDiff = difference / (100 * 60 * 60)
+      if(checkOutTime){
+        return true
+      }
+      if(hoursDiff > 2 && hoursDiff >= 22 ){
+        console.log("btn disable hona  ")
+        localStorage.removeItem("usercheckin")
+        localStorage.removeItem("usercheckout")
+        return true 
+        
+      }else{
+        // localStorage.removeItem("usercheckin")
+        
+        return false
+      }
     }
 
   }
@@ -106,26 +115,22 @@ export default function TextFieldSizes() {
       console.log(res)
       console.log(res.data.message.includes("check in"))
       if(res.data.message.includes("check in")){
+        localStorage.setItem("usercheckin" , new Date().getTime())
         setCheckIn(true)
-        localStorage.setItem("usercheckin" , new Date().getTime())
       }else{
-         const prevTime =  localStorage.getItem("usercheckin")
-         if(prevTime){
-          localStorage.removeItem("usercheckin")
-         }
-        localStorage.setItem("usercheckin" , new Date().getTime())
-        console.log("test21")
-        setCheckIn(false)
+        //  const prevTime =  localStorage.getItem("usercheckin")
+        //  if(prevTime){
+          // localStorage.removeItem("usercheckin")
+          localStorage.setItem("usercheckout" , new Date().getTime())
+          setCheckIn(false)
+        //  }
+        // localStorage.setItem("usercheckin" , new Date().getTime())
 
       }
-      console.log(checkin)
     }).catch((error)=>{
       console.log(error)
     })
   }
-  const uploadImage = () => {
-    imageInputref.current.click();
-  };
 
   const handleImageSet = (e) => {
     const file = e.target.files[0];
@@ -139,7 +144,7 @@ export default function TextFieldSizes() {
     localStorage.removeItem("token")
     redirect("/")
   }
-
+  console.log(checkin)
   console.log(ButtonDisableHandler())
   return (
     <>
@@ -176,7 +181,7 @@ export default function TextFieldSizes() {
             height="100%"
           />
 
-          <div>
+          {/* <div>
             <input
               ref={imageInputref}
               onChange={handleImageSet}
@@ -187,7 +192,7 @@ export default function TextFieldSizes() {
               onClick={uploadImage}
               className={` ${styles.cameraIcon}`}
             />
-          </div>
+          </div> */}
           {/* <FaCamera className={styles.cameraIcon} /> */}
         </div>
       </Box>
@@ -267,7 +272,7 @@ export default function TextFieldSizes() {
 
           />
         </div>
-        <button  onClick={UserChecked} className={styles.checkinBtn}>{ checkin ? " Checked Out" : "Checked In"}</button>
+        <button disabled={ButtonDisableHandler()} onClick={UserChecked} className={ checkin ? styles.checkoutBtn : styles.checkinBtn}>{ checkin ? " Checked Out" : "Checked In"}</button>
       </Box>
     </>
   );
