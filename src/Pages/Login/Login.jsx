@@ -31,18 +31,18 @@ export default function BasicTextFields() {
       }
     }).then((res) => {
 
-      console.log(res.data.user)
-      if (res.data.user) {
+      console.log(res)
+      if (res.data.user.includes("admin")) {
         localStorage.setItem('token', res.data.token)
         localStorage.setItem('id', res.data.id)
-        toast.success("User Login Successfuly")
-        navigate('/user')
+        toast.success("Admin Login Successfuly")
+        navigate('/admin')
 
       } else {
         localStorage.setItem('id', res.data.id)
-        toast.success("Admin Login Successfuly")
+        toast.success("User Login Successfuly")
 
-        navigate('/admin')
+        navigate('/user')
       }
     }).catch(err => toast.error("Enter Valid Email Or Password"))
   }
