@@ -11,6 +11,8 @@ import axios from "axios";
 import Table from "../../Components/Table/table";
 import { useParams } from "react-router-dom";
 import { useGetStudentAttendanceQuery } from "../../Components/redux/slices/apiSlice";
+import AuthRedirector from "../../Components/authRedirector";
+
 
 const Adminportal = () => {
   const [stdAttendance, setStdAttendance] = useState();
@@ -18,14 +20,13 @@ const Adminportal = () => {
   const [stdName, setStdName] = useState();
   const redirect = useNavigate();
   const { id } = useParams();
-    
-    const { data, error, isLoading } = useGetStudentAttendanceQuery(id);
-    console.log(data)
-    console.log(error)
+
+  const { data, error, isLoading } = useGetStudentAttendanceQuery(id);
+
   useEffect(() => {
     if (data) {
       setStdAttendance(data?.stdAttendance);
-     
+
     }
     console.log(error);
   }, [id, data]);
@@ -36,92 +37,54 @@ const Adminportal = () => {
   };
   return (
     <>
-      {/* <Portal/> */}
-      <div className={styles.portalContainer}>
-        {/* <div className={styles.sideBar}>
-          <h2 className={styles.sidebarHeading}>SMIT</h2>
-          <ul
-            style={{
-              display: "flex",
-              flexDirection: "column ",
-            }}
-          >
-            <div>
-              <li
-                className={styles.listItem}
-                onClick={() => redirect("/admin")}
-              >
-                {" "}
-                <CiUser
-                  style={{ color: "#3D7CF3", fontWeight: "bold", fontSize: 30 }}
-                />{" "}
-                <span
-                  style={{ fontWeight: "bold", color: "#5C93FA", fontSize: 20 }}
-                >
-                  Students
-                </span>
-              </li>
-            </div>
-            <div>
-              <li className={styles.listItem}>
-                {" "}
-                <LuUserSquare
-                  style={{ color: "#3D7CF3", fontWeight: "bold", fontSize: 30 }}
-                />{" "}
-                <span
-                  style={{ fontWeight: "bold", color: "#5C93FA", fontSize: 20 }}
-                >
-                  Attendance
-                </span>
-              </li>
-            </div>
-          </ul>
-        </div> */}
-        <div className={styles.studentsData}>
-          <div className={styles.portalHead}>
-            <div style={{ display: "flex" }}>
-              <FaUser
-                className={styles.stdIcon}
-                style={{ fontWeight: "bold", fontSize: 30 }}
-              />
-              <div>
-                <h3 style={{ marginLeft: 10 }}>Attendance</h3>
+      <AuthRedirector>
+        <div className={styles.portalContainer}>
+            <div className={styles.studentsData}>
+            <div className={styles.portalHead}>
+              <div style={{ display: "flex" }}>
+                <FaUser
+                  className={styles.stdIcon}
+                  style={{ fontWeight: "bold", fontSize: 30 }}
+                />
+                <div>
+                  <h3 style={{ marginLeft: 10 }}>Attendance</h3>
+                </div>
               </div>
-            </div>
-            <div>
-              <h3 className={styles.adminPortalHead}>Admin Portal</h3>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <button
-                onClick={() => redirect("/addStudent")}
-                className={styles.addStudentBtn}
+              <div>
+                <h3 className={styles.adminPortalHead}>Admin Portal</h3>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
-                {" "}
-                <FaPlusCircle /> Add Student
-              </button>
-            </div>
-          </div>
+                <button
+                  onClick={() => redirect("/addStudent")}
+                  className={styles.addStudentBtn}
+                >
+                  {" "}
+                  <FaPlusCircle /> Add Student
+                </button>
+              </div>
 
-          <div style={{ marginTop: 20 }}>
-            <Table
-              id="ID"
-              profileImage="Profile Img"
-              Name="Name"
-              checkinTime="Checked In Time"
-              checkoutTime="Checked out Time"
-              watchStdAttendance={watchStdAttendance}
-              data={stdAttendance}
-            />
-            {/* <DataTable /> */}
+            </div>
+
+            <div style={{ marginTop: 20 }}>
+              <Table
+                id="ID"
+                profileImage="Profile Img"
+                Name="Name"
+                checkinTime="Checked In Time"
+                checkoutTime="Checked out Time"
+                watchStdAttendance={watchStdAttendance}
+                data={stdAttendance}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      </AuthRedirector>
     </>
   );
 };

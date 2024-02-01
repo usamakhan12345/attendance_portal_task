@@ -10,7 +10,7 @@ import axios from 'axios'
 import {toast} from 'react-toastify'
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
-
+import AuthRedirector from "../../Components/authRedirector";
 
 
 
@@ -34,13 +34,13 @@ export default function TextFieldSizes() {
 
   const redirect = useNavigate()
 
-  useEffect(()=>{
-     const stdId =  localStorage.getItem("id")
-     if(!stdId){
-      redirect("/")
-     }
+  // useEffect(()=>{
+  //    const stdId =  localStorage.getItem("id")
+  //    if(!stdId){
+  //     redirect("/")
+  //    }
 
-  },[])
+  // },[])
   useEffect(()=>{
     const userCheckIn = localStorage.getItem("usercheckin")
     setLastCheckInTime(userCheckIn)
@@ -117,12 +117,15 @@ export default function TextFieldSizes() {
       if(res.data.message.includes("check in")){
         localStorage.setItem("usercheckin" , new Date().getTime())
         setCheckIn(true)
+        toast.success("User Checked In Successfuly")
       }else{
         //  const prevTime =  localStorage.getItem("usercheckin")
         //  if(prevTime){
           // localStorage.removeItem("usercheckin")
           localStorage.setItem("usercheckout" , new Date().getTime())
           setCheckIn(false)
+        toast.error("User Checked Out Successfuly")
+
         //  }
         // localStorage.setItem("usercheckin" , new Date().getTime())
 
@@ -148,6 +151,7 @@ export default function TextFieldSizes() {
   console.log(ButtonDisableHandler())
   return (
     <>
+      <AuthRedirector>
       <Box
         sx={{ width: "100%", display: "flex", justifyContent: "space-between" }}
       >
@@ -274,6 +278,7 @@ export default function TextFieldSizes() {
         </div>
         <button disabled={ButtonDisableHandler()} onClick={UserChecked} className={ checkin ? styles.checkoutBtn : styles.checkinBtn}>{ checkin ? " Checked Out" : "Checked In"}</button>
       </Box>
+      </AuthRedirector>
     </>
   );
       

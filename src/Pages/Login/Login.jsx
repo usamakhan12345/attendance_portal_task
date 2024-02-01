@@ -7,20 +7,29 @@ import axios from "axios";
 import { useNavigate } from 'react-router-dom'
 import { useState, } from "react";
 import { toast } from "react-toastify";
-
-
+import { useLocation } from 'react-router-dom';
+import AuthRedirector from "../../Components/authRedirector";
 
 export default function BasicTextFields() {
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
-
+  const location = useLocation()
   const navigate = useNavigate()
-
+  // React.useEffect(()=>{
+  //   const adminToken = localStorage.getItem('admintoken')
+  //   const userToken = localStorage.getItem('usertoken')
+  //   if(adminToken){
+  //     navigate('/admin')
+  //   }
+  //   if(userToken){
+  //     navigate('/user')
+  //   }
+  // },[location.pathname])
 
   const Userlogin = () => {
     const userDetails = {
       email,
-      password
+      password  
     }
     console.log(userDetails)
     axios({
@@ -33,13 +42,15 @@ export default function BasicTextFields() {
 
       console.log(res)
       if (res.data.user.includes("admin")) {
-        localStorage.setItem('token', res.data.token)
+        localStorage.setItem('admintoken', res.data.token)
         localStorage.setItem('id', res.data.id)
         toast.success("Admin Login Successfuly")
         navigate('/admin')
 
       } else {
         localStorage.setItem('id', res.data.id)
+        localStorage.setItem('usertoken', res.data.token)
+
         toast.success("User Login Successfuly")
 
         navigate('/user')

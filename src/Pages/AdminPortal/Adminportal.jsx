@@ -12,7 +12,13 @@ import Modal from "../../Components/Model/Modal";
 import { useGetStudentDataQuery, useGetSingleStudentQuery, useUpdateStudentDataMutation } from "../../Components/redux/slices/apiSlice"
 import { students } from "../../Components/redux/slices/studentSlice"
 import { useDispatch, useSelector } from "react-redux";
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify'
+import { RiLogoutCircleLine } from "react-icons/ri";
+import AuthRedirector from '../../Components/authRedirector'
+
+
+
+
 
 const Adminportal = () => {
   const [studentsData, setStudentsData] = useState([]);
@@ -22,17 +28,13 @@ const Adminportal = () => {
   const redirect = useNavigate();
   const dispatch = useDispatch()
   const { data, error, isLoading } = useGetStudentDataQuery("allstudents")
-  const allStudents = useSelector((state) => state.studentsData.students[0])
-    console.log("data---> direct query",data)
-  console.log(data)
   const [updateStudentData] = useUpdateStudentDataMutation()
+  const allStudents = useSelector((state) => state.studentsData.students[0])
 
-  const updateStudent = async (id , studentDetails) => {
-    console.log(id)
-    console.log(studentDetails)
-     const { data, error, isLoading } = await updateStudentData( {id , ...studentDetails })
-    console.log(data.message)
-    if(data){
+  const updateStudent = async (id, studentDetails) => {
+
+    const { data, error, isLoading } = await updateStudentData({ id, ...studentDetails })
+    if (data) {
       setOpenModal(!openModal)
       toast.success(data.message)
     }
@@ -52,17 +54,13 @@ const Adminportal = () => {
 
       dispatch(students(data.allStudents))
     }
-  }, [isLoading, data , openModal , updateStudent  , CloseModal])
+  }, [isLoading, data, openModal, updateStudent, CloseModal])
 
   useEffect(() => {
     if (allStudents) {
       setStudentsData(allStudents)
     }
-  }, [allStudents, data , openModal ])
-
-
-
-
+  }, [allStudents, data, openModal])
 
   const editStudent = (item) => {
     console.log("edit student", item)
@@ -75,16 +73,21 @@ const Adminportal = () => {
     redirect(`/attendance/${id}`);
   };
 
+  const userLogOut = () => {
+    localStorage.removeItem('admintoken')
+    redirect('/')
+  }
   return (
     <>
-      <div className={styles.portalContainer}>
-        <Modal
-          open={openModal}
-          handleClose={CloseModal}
-          updateStudent={updateStudent}
-          studentData={studentUpdatedData}
-        />
-        {/* <div className={styles.sideBar}>
+      <AuthRedirector>
+        <div className={styles.portalContainer}>
+          <Modal
+            open={openModal}
+            handleClose={CloseModal}
+            updateStudent={updateStudent}
+            studentData={studentUpdatedData}
+          />
+          {/* <div className={styles.sideBar}>
           <h2 className={styles.sidebarHeading}>SMIT</h2>
           <ul
             style={{
@@ -123,56 +126,72 @@ const Adminportal = () => {
             </div>
           </ul>
         </div> */}
-        <div className={styles.studentsData}>
-          <div className={styles.portalHead}>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <FaUser
-                className={styles.stdIcon}
-                style={{ fontWeight: "bold", fontSize: 30 }}
-              />
-              <div>
-                <h3 style={{ marginLeft: 10, fontWeight: "bold" }}>Students</h3>
+          <div className={styles.studentsData}>
+            <div className={styles.portalHead}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <FaUser
+                  className={styles.stdIcon}
+                  style={{ fontWeight: "bold", fontSize: 30 }}
+                />
+                <div>
+                  <h3 style={{ marginLeft: 10, fontWeight: "bold" }}>Students</h3>
+                </div>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <button
+                  onClick={() => redirect("/addStudent")}
+                  className={styles.addStudentBtn}
+                >
+                  {" "}
+                  <FaPlusCircle /> Add Student
+                </button>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <button
+                  onClick={userLogOut}
+                  className={styles.addStudentBtn}
+                >
+                  {" "}
+                  <RiLogoutCircleLine /> Log Out
+                </button>
               </div>
             </div>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <button
-                onClick={() => redirect("/addStudent")}
-                className={styles.addStudentBtn}
-              >
-                {" "}
-                <FaPlusCircle /> Add Student
-              </button>
+
+            <div style={{ marginTop: 20 }}>
+              <Table
+                setOpenModal={setOpenModal}
+                id="ID"
+                profileImage="Profile Img"
+                Name="Name"
+                courseName=" Course Name"
+                password="Password"
+                email="Email"
+                data={studentsData}
+                editStudent={editStudent}
+                watchStdAttendance={watchStdAttendance}
+              />
             </div>
           </div>
-
-          <div style={{ marginTop: 20 }}>
-            <Table
-              setOpenModal={setOpenModal}
-              id="ID"
-              profileImage="Profile Img"
-              Name="Name"
-              courseName=" Course Name"
-              password="Password"
-              email="Email"
-              data={studentsData}
-              editStudent={editStudent}
-              watchStdAttendance={watchStdAttendance}
-            />
-          </div>
         </div>
-      </div>
+      </AuthRedirector>
     </>
   );
 };
