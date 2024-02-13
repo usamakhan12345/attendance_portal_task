@@ -9,16 +9,32 @@ const AuthRedirector = ({children}) => {
     useEffect(()=>{
      const userToken = localStorage.getItem('usertoken')
      const adminToken = localStorage.getItem('admintoken')
+     console.log(adminToken)
      setUserToken(userToken)
      setAdminToken(adminToken)
-    }, [location.pathname])
-    if(location.pathname === '/admin' && adminToken){
+    console.log("locationm----->",location.pathname)
+
+    },[])
+    
+    if(location.pathname == '/' &&  adminToken){
+        redirect('/admin')
+        return  children
+
+    
+    }else if( location.pathname == '/' && userToken){ 
+        redirect('/user')
+
+        return children
+    }else if (location.pathname.includes('/attendance/')  && adminToken){
         return children
     }
-    if(location.pathname === '/user' && userToken){ 
+    else{
+        // console.log("Admin login successfukly") 
+        if(location.pathname !== '/' && (!adminToken && !userToken) || (location.pathname == '/user' && !userToken) ){
+            redirect('/')
+        }
         return children
-    }else{
-        redirect('/')
+        
     }
  
 }

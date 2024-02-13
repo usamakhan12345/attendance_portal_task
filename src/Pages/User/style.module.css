@@ -1,63 +1,73 @@
-.imageBox{
-    height: 100%;
-    width: 100px;
-    background-color: #5C92F7;
-    border-radius: 50%;
-    position: relative;
+.imageBox {
+  height: 100%;
+  width: 100px;
+  background-color: #5c92f7;
+  border-radius: 50%;
+  position: relative;
 }
-.addBtn{
-    margin-right: 20px;
-    background-color: #5C92F7;
-    color: white;
-    font-weight: 600;
-    border-color: #5C92F7;
-    margin-top: 20px;
-    padding: 10px 20px;
-    border-radius: 10px;
+.addBtn {
+  margin-right: 20px;
+  background-color: #5c92f7;
+  color: white;
+  font-weight: 600;
+  border-color: #5c92f7;
+  margin-top: 20px;
+  padding: 10px 20px;
+  border-radius: 10px;
+}
+.addStdHead {
+  font-weight: 700;
+  margin-top: 30px;
+  margin-left: 20px;
+  color: #5c92f7;
+  font-weight: bold;
+  font-size: 30px;
+  text-align: center !important;
+  text-transform: uppercase;
+  border: none;
+}
+.addStdHead:active {
+  opacity: 0.5;
+}
 
+.cameraIcon {
+  position: absolute;
+  bottom: 0px;
+  right: 10;
+  font-size: 18px;
+  cursor: pointer;
 }
-.addStdHead{
-    font-weight: 700;
-    margin-top: 30px;
-    margin-left: 20px;
-    color: #5C92F7;
-    font-weight: bold;
-    font-size: 30px;
-    text-align: center !important;
-    text-transform: uppercase;
-    border: none;
+.imageInput {
+  visibility: hidden;
 }
-.addStdHead:active{
-    opacity: 0.5;
+.userImage {
+  border-radius: 50%;
+}
+.checkinBtn {
+  background-color: #5c92f7;
+  border: #5c92f7;
+  color: #ffffff;
+  font-weight: bold;
+  padding: 10px 15px;
+}
+.checkoutBtn {
+  background-color: red;
+  border: red;
+  color: #ffffff;
+  font-weight: bold;
+  padding: 10px 15px;
 }
 
-.cameraIcon{
-    position: absolute;
-    bottom: 0px;
-    right: 10;    
-    font-size: 18px;
-    cursor: pointer;
-    
-}
-.imageInput{
-    visibility: hidden;
-}
-.userImage{
-    border-radius: 50%;
-}
-.checkinBtn{
-    background-color: #5C92F7;
-    border: #5C92F7;
-    color: #ffffff;
-    font-weight: bold;
-    padding: 10px 15px;
-}
-.checkoutBtn{
-    background-color: red;
-    border: red;
-    color: #ffffff;
-    font-weight: bold;
-    padding: 10px 15px;
-
+@media screen and (max-width: 470px) {
+  .btnContainere {
+    justify-content: space-around;
+    text-align: center;
+  }
+  .btnContainere > div  {
+    width: 100% ;
+  }
+  .checkoutBtn , .checkinBtn {
+    margin : 30px 0px   ;
+  }
 
 }
