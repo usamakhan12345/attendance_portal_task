@@ -13,7 +13,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useAddStudentMutation } from "../../Components/redux/slices/apiSlice";
-
+import Loader from "../../Components/Loader/index"
 export default function TextFieldSizes() {
   const [firstName, setFirstName] = useState();
   const [lastName, setlastName] = useState();
@@ -24,6 +24,8 @@ export default function TextFieldSizes() {
   const [Image, setImage] = useState();
   const [userImageFile, setUserImageFile] = useState();
   const [imageCloudUrl, setImageCloudUrl] = useState("");
+  const [laoding , setLoading] = useState(false)
+
 
   const imageInputref = useRef(0);
   const userImage = useRef(0);
@@ -33,9 +35,11 @@ export default function TextFieldSizes() {
 
 
   const AddStudent = () => {
-
+    console.log(userImageFile)
+    setLoading(true)
     const formData = new FormData();
     formData.append("file", userImageFile);
+    console.log('formData--->' , formData)
     const studentsDetails = {
       firstName,
       lastName,
@@ -64,6 +68,8 @@ export default function TextFieldSizes() {
             setPassword("");
             setPhoneNum("");
             setImage("");
+            toast.success("User Registered Successfuly")
+            setLoading(false)
           }else{
             toast.error("User Not Registered")
           }
@@ -72,6 +78,8 @@ export default function TextFieldSizes() {
         createStudents();
       })
       .catch((err) => {
+        console.log(err)
+        console.log(err.message)
         toast.error("User not Registered");
       });
    
@@ -95,9 +103,15 @@ export default function TextFieldSizes() {
 
   return (
     <>
+    {laoding && <Box sx={{ position : 'absolute' , top : '50%' , left : '50%' , transform: 'translate(-50%, -50%)' }}>
+
+
+      <Loader/>
+      </Box>}
       <Box
         sx={{ width: "100%", display: "flex", justifyContent: "space-between" }}
       >
+      
         <div>
           <h3 className={styles.addStdHead}>
             {" "}

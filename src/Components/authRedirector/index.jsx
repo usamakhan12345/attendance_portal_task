@@ -15,28 +15,30 @@ const AuthRedirector = ({children}) => {
     console.log("locationm----->",location.pathname)
 
     },[])
-    
-    if(location.pathname == '/' &&  adminToken){
-        redirect('/admin')
-        return  children
+    const isAttendancePage = /^\/attendance\/\d+$/; 
 
-    
-    }else if( location.pathname == '/' && userToken){ 
-        redirect('/user')
-
-        return children
-    }else if (location.pathname.includes('/attendance/')  && adminToken){
-        return children
-    }
-    else{
-        // console.log("Admin login successfukly") 
-        if(location.pathname !== '/' && (!adminToken && !userToken) || (location.pathname == '/user' && !userToken) ){
-            redirect('/')
+    if (isAttendancePage.test(location.pathname)) {
+        if (adminToken) {
+            // Redirect to the admin attendance page
+            redirect('/attendance' + location.pathname);
+        } else {
+            // Redirect to the home page if not an admin
+            redirect('/');
         }
-        return children
-        
     }
+     else if (location.pathname.includes('/user') && userToken) {
+        redirect('/user');
+    } else if (location.pathname === '/' && adminToken) {
+        redirect('/admin');
+    } else if (location.pathname === '/' && userToken) {
+        redirect('/user');
+    } else {
+        redirect('/');
+    }
+
+    return children;
+};
  
-}
+
 
 export default AuthRedirector

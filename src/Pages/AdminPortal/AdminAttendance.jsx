@@ -37,7 +37,6 @@ const Adminportal = () => {
   };
   return (
     <>
-      <AuthRedirector>
         <div className={styles.portalContainer}>
             <div className={styles.studentsData}>
             <div className={styles.portalHead}>
@@ -51,7 +50,7 @@ const Adminportal = () => {
                 </div>
               </div>
               <div>
-                <h3 className={styles.adminPortalHead}>Admin Portal</h3>
+                <h3 className={styles.adminPortalHead}>ADMIN PORTAL</h3>
               </div>
               <div
                 style={{
@@ -84,7 +83,6 @@ const Adminportal = () => {
             </div>
           </div>
         </div>
-      </AuthRedirector>
     </>
   );
 };

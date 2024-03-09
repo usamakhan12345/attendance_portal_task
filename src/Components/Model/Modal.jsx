@@ -6,9 +6,7 @@ import styles from "../../Pages/AddStudent/style.module.css";
 import ModalStyles from "./style.module.css";
 import TextField from "@mui/material/TextField";
 import { FaUser } from "react-icons/fa";
-import { Input } from '@mui/material';
-
-
+import {  useMediaQuery } from '@mui/material';
 const style = {
   position: "absolute",
   top: "50%",
@@ -59,7 +57,10 @@ export default function BasicModal({
        course : stdCourse,
        password : stdPassword
     }
+const handleUpdateStudent = ()=>{
+  updateStudent(studentData._id, studentDetails)
 
+}
   return (
     <div>
       <Modal
@@ -147,7 +148,7 @@ export default function BasicModal({
               />
             </div>
             <Button
-              onClick={() => updateStudent(studentData._id, studentDetails)}
+              onClick={handleUpdateStudent}
               className={ModalStyles.updateBtn}
             >
               Update

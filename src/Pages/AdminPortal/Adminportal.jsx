@@ -30,37 +30,58 @@ const Adminportal = () => {
   const { data, error, isLoading } = useGetStudentDataQuery("allstudents")
   const [updateStudentData] = useUpdateStudentDataMutation()
   const allStudents = useSelector((state) => state.studentsData.students[0])
+  console.log(data)
+  useEffect(() => {
+    if (allStudents) {
+      console.log('all student s ' , allStudents)
+      console.log(allStudents)
+      // setStudentsData(allStudents)
+    }
+  }, [allStudents , data ])
 
+  useEffect(()=>{
+    if(data){
+      dispatch(students(data?.allStudents))
+
+    }
+
+  },[data])
   const updateStudent = async (id, studentDetails) => {
 
     const { data, error, isLoading } = await updateStudentData({ id, ...studentDetails })
+    console.log(data)
+
     if (data) {
+      console.log(data?.allStudents)
+      setStudentsData(data?.allStudents)
       setOpenModal(!openModal)
+      dispatch(studentsData(data?.allStudents))
       toast.success(data.message)
     }
     console.log(error)
     toast.error(error.message)
 
+    console.log('data----------->' , data)
   }
-
 
   const CloseModal = () => {
     setOpenModal(!openModal);
     console.log("modal change")
 
   };
-  useEffect(() => {
-    if (data) {
+  // useEffect(() => {
+  //   if (data) {
 
-      dispatch(students(data.allStudents))
-    }
-  }, [isLoading, data, openModal, updateStudent, CloseModal])
+  //     dispatch(students(data.allStudents))
+  //   }
+  // }, [isLoading, data, openModal, updateStudent, CloseModal])
 
   useEffect(() => {
     if (allStudents) {
+      console.log(allStudents)
       setStudentsData(allStudents)
     }
-  }, [allStudents, data, openModal])
+  }, [allStudents, data, openModal ])
 
   const editStudent = (item) => {
     console.log("edit student", item)
@@ -79,7 +100,6 @@ const Adminportal = () => {
   }
   return (
     <>
-      <AuthRedirector>
         <div className={styles.portalContainer}>
           <Modal
             open={openModal}
@@ -191,7 +211,6 @@ const Adminportal = () => {
             </div>
           </div>
         </div>
-      </AuthRedirector>
     </>
   );
 };
